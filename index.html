@@ -357,6 +357,7 @@ function voiceInput(){
   const rec = new webkitSpeechRecognition();
   rec.lang = "hi-IN";
   rec.start();
+  
 
   rec.onresult = function(event){
     input.value = event.results[0][0].transcript;
