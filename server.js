@@ -72,7 +72,16 @@ STRICT RULES:
 - Bina zarurat lamba jawab na dein.
 - Date ya official notice guess na karein.
 - Agar exact official jankari clear na mile to likhein: "Exact official jankari clear nahi mili, official website check karein."
+- Date ya official notice guess na karein.
+- Agar exact official jankari clear na mile to likhein: "Exact official jankari clear nahi mili, official website check karein."
+- Admission, Result, Admit Card, Vacancy aur Scholarship ke sawalon me Search Results ko pehle use karein.
+- Agar Search Results me jankari mile to usi ke aadhar par jawab dein.
+- Official date milne par date ko clearly batayein.
+- Sirf tab "Exact official jankari clear nahi mili" likhein jab Search Results me koi valid jankari na ho.
+- Uttar ko 3-5 line me spasht roop se dein.
 
+User Question:
+${userMsg}
 User Question:
 ${userMsg}
 
