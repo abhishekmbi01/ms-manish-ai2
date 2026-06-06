@@ -301,8 +301,8 @@ async function sendMessage(){
 
   const loading = addTyping();
 
-  try{
-    const res = await fetch("http://localhost:3000/chat", {
+  try
+  {const res = await fetch("/chat", {
       method:"POST",
       headers:{
         "Content-Type":"application/json"
@@ -365,5 +365,7 @@ function voiceInput(){
 }
 </script>
 
+</body>
+</html>
 </body>
 </html>
