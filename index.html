@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MS Manish AI Assistant Pro v2</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+
+body{
+  min-height:100vh;
+  background:radial-gradient(circle at top,#1e3a8a,#020617 60%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+  color:white;
+}
+
+.chat-box{
+  width:470px;
+  max-width:100%;
+  height:720px;
+  background:#020617;
+  border-radius:25px;
+  overflow:hidden;
+  box-shadow:0 0 40px rgba(37,99,235,0.6);
+  display:flex;
+  flex-direction:column;
+  border:1px solid #1e40af;
+}
+
+.header{
+  background:linear-gradient(135deg,#0f172a,#1d4ed8);
+  padding:18px;
+  text-align:center;
+  border-bottom:1px solid #334155;
+}
+
+.brand{display:flex;align-items:center;justify-content:center;gap:12px}
+
+.logo{
+  width:62px;
+  height:62px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid white;
+  background:white;
+}
+
+.header h2{font-size:23px}
+.header p{font-size:13px;color:#dbeafe;margin-top:5px}
+.status{margin-top:8px;font-size:12px;color:#86efac}
+
+.tools{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin-top:14px;
+}
+
+.tools button{
+  border:0;
+  border-radius:20px;
+  background:#2563eb;
+  color:white;
+  padding:8px 14px;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.tools button:hover{background:#1d4ed8}
+
+.messages{
+  flex:1;
+  padding:16px;
+  overflow-y:auto;
+  background:linear-gradient(180deg,#020617,#0f172a);
+}
+
+.msg{
+  padding:12px 14px;
+  border-radius:17px;
+  margin:11px 0;
+  max-width:88%;
+  line-height:1.5;
+  white-space:pre-wrap;
+  font-size:15px;
+  animation:fadeIn .25s ease-in-out;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.user{
+  background:#2563eb;
+  color:white;
+  margin-left:auto;
+  border-bottom-right-radius:5px;
+}
+
+.bot{
+  background:#1e293b;
+  color:#f8fafc;
+  margin-right:auto;
+  border-bottom-left-radius:5px;
+  border:1px solid #334155;
+}
+
+.typing{display:inline-block}
+
+.typing span{
+  display:inline-block;
+  width:6px;
+  height:6px;
+  margin:0 2px;
+  background:#93c5fd;
+  border-radius:50%;
+  animation:blink 1s infinite;
+}
+
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+
+@keyframes blink{
+  0%,80%,100%{opacity:.3}
+  40%{opacity:1}
+}
+
+.quick-features{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  padding:10px 12px;
+  background:#020617;
+  border-top:1px solid #1e293b;
+}
+
+.quick-features button{
+  border:1px solid #2563eb;
+  background:#0f172a;
+  color:#fff;
+  padding:9px 6px;
+  border-radius:14px;
+  cursor:pointer;
+  font-size:12px;
+}
+
+.quick-features button:hover{
+  background:#2563eb;
+}
+
+.input-area{
+  display:flex;
+  gap:8px;
+  padding:13px;
+  background:#020617;
+  border-top:1px solid #334155;
+}
+
+input{
+  flex:1;
+  padding:13px 15px;
+  border:1px solid #334155;
+  border-radius:25px;
+  outline:none;
+  background:#0f172a;
+  color:white;
+  font-size:15px;
+}
+
+input::placeholder{color:#94a3b8}
+
+.send,.mic{
+  border:0;
+  border-radius:50%;
+  background:#2563eb;
+  color:white;
+  width:46px;
+  height:46px;
+  cursor:pointer;
+  font-size:17px;
+}
+
+.send:hover,.mic:hover{background:#1d4ed8}
+
+.footer{
+  text-align:center;
+  padding:10px;
+  background:#020617;
+  font-size:13px;
+  color:#cbd5e1;
+  border-top:1px solid #1e293b;
+}
+
+.footer a{
+  color:#60a5fa;
+  font-weight:bold;
+  text-decoration:none;
+}
+
+@media(max-width:500px){
+  .chat-box{height:95vh;border-radius:18px}
+  .header h2{font-size:20px}
+  .quick-features{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="chat-box">
+
+  <div class="header">
+    <div class="brand">
+      <img src="logo.png" class="logo" alt="Logo">
+      <div>
+        <h2>MS Manish AI Assistant</h2>
+        <p>Admission • Result • Scholarship • Online Services</p>
+      </div>
+    </div>
+
+    <div class="status">● AI Assistant Online</div>
+
+    <div class="tools">
+      <button onclick="clearChat()">Clear Chat</button>
+      <button onclick="copyLast()">Copy Reply</button>
+    </div>
+  </div>
+
+  <div class="messages" id="messages">
+    <div class="msg bot">🙏 Namaskar!
+
+MS Manish AI Assistant me aapka swagat hai।
+
+📌 Main Admission, Vacancy, Scholarship, Result, Admit Card, Online Form, PAN Card, Passport, Spiral Binding aur anya online sevaon ki jankari dene me aapki sahayata kar sakta hoon।
+
+Kripya apna prashn likhiye।</div>
+  </div>
+
+  <div class="quick-features">
+    <button onclick="quickAsk('Admission ki jankari chahiye')">🎓 Admission</button>
+    <button onclick="quickAsk('Latest vacancy ki jankari chahiye')">💼 Vacancy</button>
+    <button onclick="quickAsk('Scholarship ki jankari chahiye')">📚 Scholarship</button>
+    <button onclick="quickAsk('Result kaise check karein')">📊 Result</button>
+    <button onclick="quickAsk('Admit Card kaise download karein')">🎫 Admit Card</button>
+    <button onclick="quickAsk('Online Form bharwane ki jankari chahiye')">📝 Online Form</button>
+  </div>
+
+  <div class="input-area">
+    <input id="userInput" placeholder="Yahan apna prashn likhiye..." onkeydown="if(event.key==='Enter')sendMessage()">
+    <button class="mic" onclick="voiceInput()">🎤</button>
+    <button class="send" onclick="sendMessage()">➤</button>
+  </div>
+
+  <div class="footer">
+    Powered by <a href="https://www.instagram.com/abhishek_mbi" target="_blank">abhishek_mbi</a>
+  </div>
+
+</div>
+
+<script>
+const messages = document.getElementById("messages");
+const input = document.getElementById("userInput");
+let lastBotReply = "";
+
+function addMessage(text, cls){
+  const div = document.createElement("div");
+  div.className = "msg " + cls;
+  div.innerText = text;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+
+  if(cls === "bot"){
+    lastBotReply = text;
+  }
+
+  return div;
+}
+
+function addTyping(){
+  const div = document.createElement("div");
+  div.className = "msg bot";
+  div.innerHTML = `<div class="typing">
+    <span></span><span></span><span></span>
+  </div>`;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+  return div;
+}
+
+async function sendMessage(){
+  const text = input.value.trim();
+  if(!text) return;
+
+  addMessage(text, "user");
+  input.value = "";
+
+  const loading = addTyping();
+
+  try{
+    const res = await fetch("http://localhost:3000/chat", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        message:text
+      })
+    });
+
+    const data = await res.json();
+
+    loading.innerText = data.reply || "Response nahi mila.";
+    lastBotReply = loading.innerText;
+
+  }catch(e){
+    loading.innerText = "Server connect nahi ho raha. Kripya CMD me node server.js running rakhein.";
+    lastBotReply = loading.innerText;
+  }
+}
+
+function quickAsk(text){
+  input.value = text;
+  sendMessage();
+}
+
+function clearChat(){
+  messages.innerHTML = `<div class="msg bot">🙏 Namaskar!
+
+MS Manish AI Assistant me aapka swagat hai।
+
+📌 Main Admission, Vacancy, Scholarship, Result, Admit Card, Online Form, PAN Card, Passport, Spiral Binding aur anya online sevaon ki jankari dene me aapki sahayata kar sakta hoon।
+
+Kripya apna prashn likhiye।</div>`;
+}
+
+function copyLast(){
+  if(!lastBotReply){
+    alert("Copy karne ke liye koi reply nahi hai.");
+    return;
+  }
+
+  navigator.clipboard.writeText(lastBotReply);
+  alert("Reply copy ho gaya ✅");
+}
+
+function voiceInput(){
+  if(!("webkitSpeechRecognition" in window)){
+    alert("Voice input ke liye Chrome browser use karein.");
+    return;
+  }
+
+  const rec = new webkitSpeechRecognition();
+  rec.lang = "hi-IN";
+  rec.start();
+
+  rec.onresult = function(event){
+    input.value = event.results[0][0].transcript;
+    sendMessage();
+  };
+}
+</script>
+
+</body>
+</html>
