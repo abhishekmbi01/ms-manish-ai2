@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const SEARCH_API_KEY = process.env.SEARCH_API_KEY || "fVnC5SRnkJH8DiutEsz1e28g";
+const SEARCH_API_KEY = process.env.SEARCH_API_KEY || "YOUR_SEARCH_API_KEY_HERE";
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
@@ -83,7 +83,7 @@ Final Answer:
 `;
 
     const gemini = await axios.post(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         contents: [
           {
