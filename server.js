@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
-const GEMINI_API_KEY = process.env.AQ.Ab8RN6J2juvbslM6JDoP8yveuV2ehTSRGb88hk1Ab7yCZUq2AQ;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const SEARCH_API_KEY = process.env.SEARCH_API_KEY || "fVnC5SRnkJH8DiutEsz1e28g";
 
 app.get("/", (req, res) => {
