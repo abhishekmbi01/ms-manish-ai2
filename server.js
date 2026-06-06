@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
+const path = require("path");
 
 const app = express();
 
@@ -8,10 +9,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
-const SEARCH_API_KEY = "fVnC5SRnkJH8DiutEsz1e28g";
+const GEMINI_API_KEY = process.env.AQ.Ab8RN6J2juvbslM6JDoP8yveuV2ehTSRGb88hk1Ab7yCZUq2AQ;
+const SEARCH_API_KEY = process.env.SEARCH_API_KEY || "fVnC5SRnkJH8DiutEsz1e28g";
 
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.post("/chat", async (req, res) => {
@@ -20,6 +22,10 @@ app.post("/chat", async (req, res) => {
 
     if (!userMsg) {
       return res.json({ reply: "Kripya apna prashn likhiye." });
+    }
+
+    if (!GEMINI_API_KEY) {
+      return res.json({ reply: "Gemini API key set nahi hai. Render Environment me GEMINI_API_KEY add karein." });
     }
 
     const q = userMsg.toLowerCase();
@@ -35,7 +41,7 @@ app.post("/chat", async (req, res) => {
 
     let results = "";
 
-    if (needSearch) {
+    if (needSearch && SEARCH_API_KEY !== "YOUR_SEARCH_API_KEY_HERE") {
       try {
         const search = await axios.get("https://www.searchapi.io/api/v1/search", {
           params: {
@@ -49,34 +55,22 @@ app.post("/chat", async (req, res) => {
           .slice(0, 2)
           .map((r, i) => `${i + 1}. ${r.title}\n${r.snippet}\n${r.link}`)
           .join("\n\n");
-
       } catch (e) {
-        console.log("Search Error:", e.message);
         results = "Live search result available nahi hai.";
       }
     } else {
-      results = "Live search ki zarurat nahi hai. General answer dein.";
+      results = "Live search ki zarurat nahi hai ya Search API key set nahi hai.";
     }
 
-    const ai = await axios.post("http://localhost:11434/api/generate", {
-      model: "llama3.2:3b",
-      stream: false,
-      prompt: `
+    const prompt = `
 Aap MS Manish AI Assistant hain.
 
 STRICT RULES:
-- Hindi me jawab dein.
-- Boss, Sir, Madam, Dear jaise shabd na use karein.
-- Answer ki shuruaat "Aap" se na karein.
-- Sirf seedha tathyaatmak jawab dein.
+- Hindi/Hinglish me seedha jawab dein.
+- Boss, Sir, Madam, Dear jaise shabd reply me na use karein.
 - Answer complete sentence me dein.
-- Agar answer 1 line me ho sakta hai to 1 line me dein.
 - Bina zarurat lamba jawab na dein.
-- Search Results ko seedha copy na karein.
-- Search Results ko padhkar short summary dein.
-- Bina zarurat links ki list na dein.
-- Link tabhi dein jab bahut zaruri ho.
-- Galat jankari ya date guess na karein.
+- Date ya official notice guess na karein.
 - Agar exact official jankari clear na mile to likhein: "Exact official jankari clear nahi mili, official website check karein."
 
 User Question:
@@ -86,19 +80,40 @@ Search Results:
 ${results}
 
 Final Answer:
-`
-    });
+`;
 
-    res.json({ reply: ai.data.response || "Response nahi mila." });
+    const gemini = await axios.post(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+      {
+        contents: [
+          {
+            parts: [{ text: prompt }]
+          }
+        ]
+      },
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    const reply =
+      gemini.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "Response nahi mila.";
+
+    res.json({ reply });
 
   } catch (err) {
-    console.log("ERROR:", err.message);
+    console.log("ERROR:", err.response?.data || err.message);
     res.json({
-      reply: "Server, SearchAPI ya Ollama me error hai. Kripya CMD check karein."
+      reply: "Server ya Gemini API me error hai. Render logs check karein."
     });
   }
 });
 
-app.listen(3000, () => {
-  console.log("✅ Fast Live MS Manish AI Server Running : http://localhost:3000");
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log("✅ MS Manish AI Server Running on port " + PORT);
 });
