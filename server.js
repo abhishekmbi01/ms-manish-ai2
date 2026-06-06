@@ -112,7 +112,7 @@ Final Answer:
   } catch (err) {
     console.log("ERROR:", err.response?.data || err.message);
     res.json({
-      reply: "Server ya Gemini API me error hai. Render logs check karein."
+      reply: "AI server par abhi adhik load hai. Kripya thodi der baad phir prayas karein."
     });
   }
 });
