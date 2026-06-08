@@ -21,7 +21,9 @@ app.post("/chat", async (req, res) => {
     const userMsg = (req.body.message || "").trim();
 
     if (!userMsg) {
-      return res.json({ reply: "Kripya apna prashn likhiye." });
+      return res.json({
+  reply: "🙏 MS Manish Digital Cyber Expert में आपका स्वागत है। कृपया अपना प्रश्न लिखें, हम आपकी सहायता के लिए तैयार हैं।"
+});
     }
 
     if (!GEMINI_API_KEY) {
@@ -88,7 +90,7 @@ Final Answer:
 `;
 
     const gemini = await axios.post(
-      https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}
+  `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         contents: [
           {
